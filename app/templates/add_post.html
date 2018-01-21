@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+    <br><br><br><br>
+
+    <form action="" method="POST" name="form">
+        <div class="col-md-4 col-md-offset-4">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label class="control-label" for="posts_title"></label><br>
+                {{ form.title(placeholder="TITLE") }}
+            </div>
+            <div class="form-group">
+                {{ form.post(placeholder="TEXT (max 158)", maxlength="158") }}
+            </div>
+            <div class="form-group">
+                {{ form.image(placeholder="IMAGE") }}
+            </div>
+            <div class="form-group">
+                {{ form.link(placeholder="LINK") }}
+            </div>
+            <div class="form-group">
+                {{ form.tags(placeholder="TAGS") }}
+            </div>
+            <button class="btn btn-info" type="submit">POST IT</button>
+        </div>
+    </form>
+    
+{% endblock %}
