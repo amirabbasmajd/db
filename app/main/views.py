@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from time import time
 from bson.objectid import ObjectId
@@ -44,14 +45,17 @@ def new_post():
 
     form = AddPostForm()
     published_on = datetime.fromtimestamp(time()).strftime('%d-%m-%Y in %H:%M')
-    if form.validate_on_submit() :
+    if form.validate_on_submit():
+        file_path = "/static/img/" + str(uuid.uuid1())
         mongo.db.posts.insert({'title': form.title.data,
                                'post_body': form.post.data,
                                'published_on': published_on,
-                               'image': form.image.data,
+                               'image': file_path,
+                               'image_file_name': request.files['image'].filename,
                                'link': form.link.data,
                                'tags': form.tags.data.split(',')
                                })
+        request.files['image'].save("../mongodb_project/app" + file_path)
         flash('Post added successfully!', category='success')
         return redirect(url_for('main.new_post'))
     return render_template('add_post.html', form=form)
