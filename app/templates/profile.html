@@ -4,15 +4,16 @@
 <body>
     <br>
 
-        {% if current_user.is_authenticated  %}
+        {% if current_user.is_authenticated %}
 <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
 	<div class="row panel">
 		<div class="col-md-4 bg_blur ">
 		</div>
         <div class="col-md-8  col-xs-12">
            <div class="header">
-                <h1>Lk Geimfari</h1>
-                <h5>Back-end Developer</h5>
+                <h1>{{ user_detail['_id'] }}</h1>
+                <h5>{{ user_detail['fullname'] }}</h5>
+                <h5>{{ user_detail['email'] }}</h5>
                 <span>Hello! My name is Lk Geimfari. I live in the Russian Federation. I'm a programmer.
                     I know and use Python, JavaScript and Golang. Also i use in work databases such as PostgreSQL, MongoDB, Redis etc. I write web-applications using Django and Flask. Sometimes i write on Go.</span>
                     <p><br>
@@ -40,7 +41,41 @@
         background-size: cover;
     }
 </style>
-{% else %}
+
+            {% for data in post %}
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+                <img class="img-rounded" src= {{ data['image'] }}>
+
+                <div class="caption text-center">
+                    <p>
+                        <b>
+                            <h4>{{ data['title'] }}</h4></b>
+                    </p>
+                    <p>{{ data['post_body'] }}</p>
+                    <p>
+                        <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
+                    </p>
+
+
+                    {% if 'tags' in data %}
+                        <hr>
+                        {% for tag in data['tags'] %}
+                            <span class="label label-default">{{ tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+
+                {% if can_edit %}
+                    <a style="color: red" href="/editpost?postid={{ data['_id'] }}">Edit</a>
+                    <a style="color: red" href="/deletepost?postid={{ data['_id'] }}">Delete</a>
+                {% endif %}
+
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+        {% else %}
 <h1></h1>
 {% endif %}
 

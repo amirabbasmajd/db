@@ -55,7 +55,7 @@ def registration():
     email = form.email.data
     password = form.password.data
 
-    if form.validate_on_submit() or True:
+    if form.validate_on_submit():
         try:
             mongo.db.users.insert({'_id': username,
                                    'full_name': full_name,
