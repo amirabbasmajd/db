@@ -25,12 +25,10 @@ from app.main.forms import SearchForm
 @login_required
 def home():
 
-    print('zzzzzzzzz')
     if request.method == 'POST':
 
         request.form[''];
         flash('comment add successfully', category='success')
-    print("hello")
     post = mongo.db.posts.find()
     return render_template('index.html', post=post )
 
@@ -180,3 +178,13 @@ def showpostandcomment():
         mongo.db.posts.update({"_id":ObjectId(s)} , {"$push": {"comments": comment}})
 
     return render_template('showpostcomment.html' ,post=post , form= addComment())
+
+@main.route('/likepost' , methods=['GET', 'POST'])
+def likepost():
+    s = request.args.get('myid')
+    countLike = mongo.db.posts.find({"like": current_user.username, "_id": ObjectId(s)}).count()
+    if countLike == 0 :
+        mongo.db.posts.update({"_id":ObjectId(s)} , {"$push": {"like": current_user.username }})
+    else:
+        mongo.db.posts.update({"_id":ObjectId(s)} , {"$pull": {"like": current_user.username }})
+    return redirect(url_for('main.home'))

@@ -29,7 +29,10 @@
                             {% endfor %}
                         {% endif %}
                     </div>
+                <a  class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like IT</a>
+                {{ data['like']|length }}
                 </div>
+
             </div>
         {% endfor %}
     </form>
