@@ -1,7 +1,9 @@
 import uuid
 from datetime import datetime
+from queue import Empty
 from time import time
 from bson.objectid import ObjectId
+from flask_login import current_user
 
 from flask import (
     render_template,
@@ -15,7 +17,7 @@ from flask_login import login_required
 from app import mongo
 from app.main import main
 from app.main.forms import AddPostForm
-from app.main.forms import addMyComment
+from app.main.forms import addComment
 
 
 @main.route('/', methods=['GET', 'POST'] )
@@ -29,7 +31,7 @@ def home():
         flash('comment add successfully', category='success')
     print("hello")
     post = mongo.db.posts.find()
-    return render_template('index.html', post=post , form=addMyComment())
+    return render_template('index.html', post=post )
 
 
 
@@ -68,12 +70,15 @@ def profile():
 # @main.route('/showpostandcomment/<string:post_id>', methods=['GET', 'POST'])
 @main.route('/showpostandcomment', methods=['GET', 'POST'])
 def showpostandcomment():
-
     s = request.args.get('myid')
-    post = mongo.db.posts.find({"_id":ObjectId(s)})
+    post = mongo.db.posts.find({"_id": ObjectId(s)})
 
-    comment = [];
-    # comment.
-    mongo.db.posts.update({"_id":ObjectId(s)} , {"link":"aaa"})
+    if request.method == 'GET':
+        return render_template('showpostcomment.html', post=post , form= addComment())
 
-    return render_template('showpostcomment.html' ,post=post)
+    form = addComment()
+    if form.addYourComment.data != "":
+        comment = {'userId': current_user.username , 'text': form.addYourComment.data}
+        mongo.db.posts.update({"_id":ObjectId(s)} , {"$push": {"comments": comment}})
+
+    return render_template('showpostcomment.html' ,post=post , form= addComment())

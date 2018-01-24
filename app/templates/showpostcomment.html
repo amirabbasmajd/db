@@ -1,36 +1,67 @@
 {% extends "layout.html" %}
 {% block content %}
+    <form action="" method="POST" name="form">
 
-    <form action="/showpostandcomment" method="POST" name="form">
-    {% for data in post %}
-        <div class="col-sm-6 col-md-3">
-            <div class="thumbnail">
-                <img class="img-rounded" src= {{ data['image'] }}>
+        <div class="col-md-12">
+            <div class="col-md-5">
+                {% for data in post %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="thumbnail">
+                                <img class="img-rounded" src= {{ data['image'] }}>
 
-                <div class="caption text-center">
-                    <p>
-                        <b>
-                            <h4>{{ data['title'] }}</h4></b>
-                    </p>
-                    <p>{{ data['post_body'] }}</p>
-                    <p>
-                        <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
-                    </p>
-{{data['_id']}}
-                <br>
-{#                    <button class="btn btn-info" type="submit" href="/showpostandcomment?myid="{{data['_id']}} id = "btnCommit" value= {{ data['_id'] }} > show post comment</button>#}
-{#                    <a href="/showpostandcomment?myid={{data['_id']}}"  class="button">Go to Google</a>#}
-                    {% if 'tags' in data %}
-                        <hr>
-                        {% for tag in data['tags'] %}
-                            <span class="label label-default">{{ tag }}</span>
+                                <div class="caption text-center">
+                                    <p>
+                                        <b>
+                                            <h4>{{ data['title'] }}</h4></b>
+                                    </p>
+                                    <p>{{ data['post_body'] }}</p>
+                                    <p>
+                                        <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
+                                    </p>
+                                    {{ data['_id'] }}
+                                    <br>
+                                    {#                    <button class="btn btn-info" type="submit" href="/showpostandcomment?myid="{{data['_id']}} id = "btnCommit" value= {{ data['_id'] }} > show post comment</button>#}
+                                    {#                    <a href="/showpostandcomment?myid={{data['_id']}}"  class="button">Go to Google</a>#}
+                                    {% if 'tags' in data %}
+                                        <hr>
+                                        {% for tag in data['tags'] %}
+                                            <span class="label label-default">{{ tag }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" >
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form.addYourComment(placeholder="add your comment here") }}
+                                 <button class="btn btn-info" type="submit" style="float: right ; margin-top: 10px">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-7">
+                        {% for aaa in data['comments'] %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="thumbnail"
+                                         style="background-color: #2e9c81 ; color: white ; margin-bottom: 0px">
+                                        {{ aaa['userId'] }}
+                                        <div class="thumbnail" style="margin-bottom: 0px ; color: black">
+                                            {{ aaa['text'] }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
                         {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
+                    </div>
+
+                {% endfor %}
         </div>
-    {% endfor %}
     </form>
-
-
 {% endblock %}

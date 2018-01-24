@@ -10,7 +10,5 @@ class AddPostForm(Form):
     link = StringField('Link', validators=[DataRequired()])
     tags = StringField('Tags')
 
-class addMyComment(Form):
-    postId = StringField('postId', validators=[DataRequired()])
-    comment = TextAreaField('Text' , validators=[DataRequired() , Length(min=1 , max=256)])
-    userId = StringField('userId' , validators=[DataRequired()])
+class addComment(Form):
+    addYourComment = StringField('comment', validators=[DataRequired()])
