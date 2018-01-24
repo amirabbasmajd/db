@@ -185,6 +185,22 @@ def likepost():
     countLike = mongo.db.posts.find({"like": current_user.username, "_id": ObjectId(s)}).count()
     if countLike == 0 :
         mongo.db.posts.update({"_id":ObjectId(s)} , {"$push": {"like": current_user.username }})
+        flash('Post liked successfully!', category='success')
     else:
         mongo.db.posts.update({"_id":ObjectId(s)} , {"$pull": {"like": current_user.username }})
+        flash('Like removed successfully!', category='warning')
+    return redirect(url_for('main.home'))
+
+@main.route('/bookmark' , methods=['GET', 'POST'])
+def bookmark():
+    print("here")
+    s = request.args.get('myid')
+    print(s)
+    isBookmarked = mongo.db.users.find({"_id":current_user.username,"bookmarks":s}).count()
+    if isBookmarked == 0 :
+        mongo.db.users.update({"_id":current_user.username} , {"$push": {"bookmarks":s}})
+        flash('Post bookmarked successfully!', category='success')
+    else:
+        mongo.db.users.update({"_id": current_user.username}, {"$pull": {"bookmarks": s}})
+        flash('Bookmark removed  successfully!', category='warning')
     return redirect(url_for('main.home'))
