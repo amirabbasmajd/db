@@ -166,13 +166,12 @@ def profile():
 # @main.route('/showpostandcomment/<string:post_id>', methods=['GET', 'POST'])
 @main.route('/showpostandcomment', methods=['GET', 'POST'])
 def showpostandcomment():
-    # if request.form['postId']:
-    #     exit(0);
 
-    # print( request.form['id'])
-    # print('helll')
-    # pprint (" helllllllo")
     s = request.args.get('myid')
     post = mongo.db.posts.find({"_id":ObjectId(s)})
+
+    comment = [];
+    # comment.
+    mongo.db.posts.update({"_id":ObjectId(s)} , {"link":"aaa"})
 
     return render_template('showpostcomment.html' ,post=post)
