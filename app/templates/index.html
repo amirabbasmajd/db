@@ -34,11 +34,13 @@
                             {{ data['like']|length }} likes
                         </div>
                             {% if current_user.username not in data['like'] %}
-                                <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like
-                                    IT</a>
+                                <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">
+                                <img src="../static/css/favorite.png" style="width: 20px ; height: 20px">
+                                </a>
                             {% else %}
-                                <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Dislike
-                                    IT</a>
+                                <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">
+                                <img src="../static/css/NotFavorite.png" style="width: 20px ; height: 20px">
+                                </a>
                             {% endif %}
 
                             {% if data._id|string in userbookmarks %}
