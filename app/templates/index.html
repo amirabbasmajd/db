@@ -6,43 +6,49 @@
     <form action="/showpostandcomment" method="POST" name="form">
         {% for data in post %}
             <div class="col-sm-6 col-md-3">
-                <div class="thumbnail">
-                    <img class="img-rounded" src= {{ data['image'] }}>
+                <div class="thumbnail" style="background-color: #4cae4c ; color: black ;margin-bottom: 0px">
+                    <a href="/profile?username={{ data['username'] }}" style="color: white">username : {{ data['username'] }} </a>
+                    <div class="thumbnail" style="margin-bottom: 0px">
 
-                    <div class="caption text-center">
-                        <p>
-                            <b>
-                                <h4>{{ data['title'] }}</h4></b>
-                        </p>
-                        <p>{{ data['post_body'] }}</p>
-                        <p>
-                            <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
-                        </p>
-                        <br>
-                        <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Show comments</a>
-                        {% if 'tags' in data %}
-                            <hr>
-                            {% for tag in data['tags'] %}
-                                <span class="label label-default">{{ tag }}</span>
-                            {% endfor %}
-                        {% endif %}
+                        <img class="img-rounded" src= {{ data['image'] }}>
+
+                        <div class="caption text-center">
+                            <p>
+                                <b>
+                                    <h4>{{ data['title'] }}</h4></b>
+                            </p>
+                            <p>{{ data['post_body'] }}</p>
+                            <p>
+                                <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
+                            </p>
+                            <br>
+                            <a href="/showpostandcomment?myid={{ data['_id'] }}" class="btn btn-info">Show comments</a>
+                            {% if 'tags' in data %}
+                                <hr>
+                                {% for tag in data['tags'] %}
+                                    <span class="label label-default">{{ tag }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div>
+                            {{ data['like']|length }} likes
+                        </div>
+                            {% if current_user.username not in data['like'] %}
+                                <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like
+                                    IT</a>
+                            {% else %}
+                                <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Dislike
+                                    IT</a>
+                            {% endif %}
+
+                            {% if data._id|string in userbookmarks %}
+                                <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
+                                   style="float: right"><img src="../static/css/bookmark.png" style="width: 20px ; height: 20px"></a>
+                            {% else %}
+                                <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
+                                   style="float: right"><img src="../static/css/notbookmarked.png" style="width: 20px ; height: 20px"></a>
+                            {% endif %}
                     </div>
-                    {{ data['like']|length }}
-
-                    {% if current_user.username not in data['like'] %}
-                        <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like IT</a>
-                    {% else %}
-                        <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Dislike IT</a>
-                    {% endif %}
-
-                    {% if data._id|string in userbookmarks %}
-                        <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
-                           style="float: right">remove</a>
-                    {% else %}
-                        <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
-                           style="float: right">add</a>
-                    {% endif %}
-
                 </div>
 
             </div>

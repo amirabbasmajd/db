@@ -11,7 +11,8 @@
                 </div>
                 <div class="col-md-8  col-xs-12">
                     <div class="header">
-                        <h1>{{ user_detail['_id'] }}</h1>
+                        <h1>{{ user_detail['_id'] }} <a href="/editprofile"><img src="../static/css/edit.png"
+                                                                                 style="width: 30px"></a></h1>
                         <h5>{{ user_detail['fullname'] }}</h5>
                         <h5>{{ user_detail['email'] }}</h5>
                         <span>Hello! My name is Lk Geimfari. I live in the Russian Federation. I'm a programmer.
@@ -28,9 +29,12 @@
             <div class="row nav">
                 <div class="col-md-4"></div>
                 <div class="col-md-8 col-xs-12" style="margin: 0px;padding: 0px;">
-                    <div class="col-md-4 col-xs-4 well"><i class="fa fa-bookmark fa-lg"></i> 15</div>
-                    <div class="col-md-4 col-xs-4 well"><i class="fa fa-heart fa-lg"></i> 0</div>
-                    <div class="col-md-4 col-xs-4 well"><i class="fa fa-thumbs-up fa-lg"></i> 0</div>
+                    <a href="/mybookmarks">
+                        <div class="col-md-4 col-xs-4 well"><i class="fa fa-bookmark fa-lg"></i> {{ num_bookmarks }}
+                        </div>
+                    </a>
+                    <div class="col-md-4 col-xs-4 well"><i class="fa fa-heart fa-lg"></i> {{ num_posts_likes }}</div>
+                    <div class="col-md-4 col-xs-4 well"><i class="fa fa-thumbs-up fa-lg"></i> {{ num_posts }}</div>
                 </div>
             </div>
         </div>
@@ -58,16 +62,21 @@
                         </p>
                         <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Show Comments</a>
 
-                        {% if 'tags' in data %}
-                            <hr>
-                            {% for tag in data['tags'] %}
-                                <span class="label label-default">{{ tag }}</span>
-                            {% endfor %}
-                        {% endif %}
+                        <div class="row">
+                            {% if 'tags' in data %}
+                                <hr>
+                                {% for tag in data['tags'] %}
+                                    <span class="label label-default">{{ tag }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
 
                         {% if can_edit %}
-                            <a style="color: red" href="/editpost?postid={{ data['_id'] }}">Edit</a>
-                            <a style="color: red" href="/deletepost?postid={{ data['_id'] }}">Delete</a>
+                            <div class="row" style="margin-top: 10px">
+                                <a style="width: 50px ; height: 50px" href="/editpost?postid={{ data['_id'] }}"
+                                   class="btn btn-info"><img src="../static/css/edit.png"></a>
+                                <a style="width: 50px ; height: 50px" href="/deletepost?postid={{ data['_id'] }}" class="btn btn-info"><img src="../static/css/delete.png"></a>
+                            </div>
                         {% endif %}
 
                     </div>

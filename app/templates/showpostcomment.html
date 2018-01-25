@@ -43,14 +43,14 @@
                     </div>
                     </div>
                     <div class="col-md-7">
-                        {% for aaa in data['comments'] %}
+                        {% for comment in data['comments'] %}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="thumbnail"
                                          style="background-color: #2e9c81 ; color: white ; margin-bottom: 0px">
-                                        {{ aaa['userId'] }}
+                                        <a href="/profile?username={{ comment['userId'] }}">{{ comment['userId'] }} </a>
                                         <div class="thumbnail" style="margin-bottom: 0px ; color: black">
-                                            {{ aaa['text'] }}
+                                            {{ comment['text'] }}
                                         </div>
                                     </div>
 
