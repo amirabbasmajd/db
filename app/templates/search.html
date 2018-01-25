@@ -33,7 +33,7 @@
                     {{ data['_id'] }}
                     <br>
 
-                    <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Go to Google</a>
+                    <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Show Comments</a>
                     {% if 'tags' in data %}
                         <hr>
                         {% for tag in data['tags'] %}

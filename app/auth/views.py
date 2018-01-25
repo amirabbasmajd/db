@@ -65,7 +65,7 @@ def registration():
                                    })
 
             flash('Successfully created an account!', category='success')
-            #send_email(email, full_name, username, password)
+            # send_email(email, full_name, username, password)
             return redirect(url_for("auth.login"))
         except DuplicateKeyError:
             flash('Username already exist', category='error')

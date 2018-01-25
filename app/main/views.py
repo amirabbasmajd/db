@@ -12,7 +12,7 @@ from flask import (
     request,
     flash
 )
-from flask_login import login_required , current_user
+from flask_login import login_required, current_user
 
 from app import mongo
 from app.main import main
@@ -21,7 +21,7 @@ from app.main.forms import addComment
 from app.main.forms import SearchForm
 
 
-@main.route('/', methods=['GET', 'POST'] )
+@main.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if request.method == 'POST':
@@ -31,11 +31,10 @@ def home():
     try:
         userbookmarks = mongo.db.users.find_one({"_id": current_user.username})['bookmarks']
         print(userbookmarks)
-        return render_template('index.html', post=post , userbookmarks=userbookmarks )
+        return render_template('index.html', post=post, userbookmarks=userbookmarks)
     except:
         print("not exist")
     return render_template('index.html', post=post, userbookmarks=[])
-
 
 
 # @main.add_comment('/addcommenct' ,methods=['GET', 'POST'] )
@@ -60,7 +59,7 @@ def new_post():
                                'image_file_name': request.files['image'].filename,
                                'link': form.link.data,
                                'tags': form.tags.data.split(','),
-                               'username':current_user.username
+                               'username': current_user.username
                                })
         request.files['image'].save("../db/app" + file_path)
         flash('Post added successfully!', category='success')
@@ -117,12 +116,13 @@ def editpost():
         return redirect(url_for('main.profile'))
     return render_template('add_post.html', form=form)
 
+
 @main.route('/deletepost')
 @login_required
 def delete_post():
     postid = request.args.get('postid')
-    if current_user.username == mongo.db.posts.find_one({'_id':ObjectId(postid)})['username']:
-        mongo.db.posts.delete_one({'_id':ObjectId(postid)})
+    if current_user.username == mongo.db.posts.find_one({'_id': ObjectId(postid)})['username']:
+        mongo.db.posts.delete_one({'_id': ObjectId(postid)})
     return redirect(url_for('main.profile'))
 
 
@@ -134,9 +134,11 @@ def search():
     form = SearchForm()
     searched_text = form.search_text.data
     if form.validate_on_submit():
-        return render_template('search.html', title='Search',
-                               form=form,
-                               post=mongo.db.posts.find({"$text": {"$search": searched_text}}))
+        print("enter search")
+
+        post = mongo.db.posts.find(
+            {"$or": [{"title": {"$regex": searched_text}}, {"post_body": {"$regex": searched_text}}]})
+        return render_template('search.html', title='Search', form=form, post=post)
 
         # flash('Username already exist', category='error')
     return render_template('search.html', form=form)
@@ -174,35 +176,37 @@ def showpostandcomment():
     post = mongo.db.posts.find({"_id": ObjectId(s)})
 
     if request.method == 'GET':
-        return render_template('showpostcomment.html', post=post , form= addComment())
+        return render_template('showpostcomment.html', post=post, form=addComment())
 
     form = addComment()
     if form.addYourComment.data != "":
-        comment = {'userId': current_user.username , 'text': form.addYourComment.data}
-        mongo.db.posts.update({"_id":ObjectId(s)} , {"$push": {"comments": comment}})
+        comment = {'userId': current_user.username, 'text': form.addYourComment.data}
+        mongo.db.posts.update({"_id": ObjectId(s)}, {"$push": {"comments": comment}})
 
-    return render_template('showpostcomment.html' ,post=post , form= addComment())
+    return render_template('showpostcomment.html', post=post, form=addComment())
 
-@main.route('/likepost' , methods=['GET', 'POST'])
+
+@main.route('/likepost', methods=['GET', 'POST'])
 def likepost():
     s = request.args.get('myid')
     countLike = mongo.db.posts.find({"like": current_user.username, "_id": ObjectId(s)}).count()
-    if countLike == 0 :
-        mongo.db.posts.update({"_id":ObjectId(s)} , {"$push": {"like": current_user.username }})
+    if countLike == 0:
+        mongo.db.posts.update({"_id": ObjectId(s)}, {"$push": {"like": current_user.username}})
         flash('Post liked successfully!', category='success')
     else:
-        mongo.db.posts.update({"_id":ObjectId(s)} , {"$pull": {"like": current_user.username }})
+        mongo.db.posts.update({"_id": ObjectId(s)}, {"$pull": {"like": current_user.username}})
         flash('Like removed successfully!', category='warning')
     return redirect(url_for('main.home'))
 
-@main.route('/bookmark' , methods=['GET', 'POST'])
+
+@main.route('/bookmark', methods=['GET', 'POST'])
 def bookmark():
     print("here")
     s = request.args.get('myid')
     print(s)
-    isBookmarked = mongo.db.users.find({"_id":current_user.username,"bookmarks":s}).count()
-    if isBookmarked == 0 :
-        mongo.db.users.update({"_id":current_user.username} , {"$push": {"bookmarks":s}})
+    isBookmarked = mongo.db.users.find({"_id": current_user.username, "bookmarks": s}).count()
+    if isBookmarked == 0:
+        mongo.db.users.update({"_id": current_user.username}, {"$push": {"bookmarks": s}})
         flash('Post bookmarked successfully!', category='success')
     else:
         mongo.db.users.update({"_id": current_user.username}, {"$pull": {"bookmarks": s}})

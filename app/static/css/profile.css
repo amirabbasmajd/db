@@ -1,44 +1,42 @@
-*{
-font-family: 'Open Sans', sans-serif;
+* {
+    font-family: 'Open Sans', sans-serif;
 }
 
 .well {
-margin-top:-18px;
-background-color:#fff;
-border:2px solid #fff;
-text-align:center;
-cursor:pointer;
-font-size: 25px;
-padding: 15px;
-border-radius: 0px !important;
+    margin-top: -18px;
+    background-color: #fff;
+    border: 2px solid #fff;
+    text-align: center;
+    cursor: pointer;
+    font-size: 25px;
+    padding: 15px;
+    border-radius: 0px !important;
 }
 
 .well:hover {
-margin-top:-17px;
-background-color:#EEEEEE;
-border:2px solid #EEEEEE;
-text-align:center;
-cursor:pointer;
-font-size: 25px;
-padding: 15px;
-border-radius: 0px !important;
-border-bottom : 2px solid rgba(97, 203, 255, 0.65);
+    margin-top: -17px;
+    background-color: #EEEEEE;
+    border: 2px solid #EEEEEE;
+    text-align: center;
+    cursor: pointer;
+    font-size: 25px;
+    padding: 15px;
+    border-radius: 0px !important;
+    border-bottom: 2px solid rgba(97, 203, 255, 0.65);
 }
 
-.header{
-color : #808080;
-margin-left:10%;
-margin-top:70px;
+.header {
+    color: #808080;
+    margin-left: 10%;
+    margin-top: 70px;
 }
-
 
 @media (max-width: 767px) {
-.header{
-    text-align : center;
-}
+    .header {
+        text-align: center;
+    }
 
-
-.nav{
-    margin-top : 30px;
-}
+    .nav {
+        margin-top: 30px;
+    }
 }

@@ -30,9 +30,9 @@
                         {% endif %}
                     </div>
                     {{ data['like']|length }}
-                    {% print("here index")%}
-                    {% print(userbookmarks)%}
-                    {% print( data['_id'])%}
+                    {% print("here index") %}
+                    {% print(userbookmarks) %}
+                    {% print( data['_id']) %}
                     {% if current_user.username not in data['like'] %}
                         <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like IT</a>
                     {% else %}
