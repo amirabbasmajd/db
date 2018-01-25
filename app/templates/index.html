@@ -29,9 +29,24 @@
                             {% endfor %}
                         {% endif %}
                     </div>
+                    {{ data['like']|length }}
+                    {% print("here index")%}
+                    {% print(userbookmarks)%}
+                    {% print( data['_id'])%}
+                    {% if current_user.username not in data['like'] %}
                         <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like IT</a>
-                        {{ data['like']|length }}
-                        <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button" style="float: right">bookmark</a>
+                    {% else %}
+                        <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Dislike IT</a>
+                    {% endif %}
+
+                    {% if data['_id'] in userbookmarks %}
+                        <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
+                           style="float: right">remove</a>
+                    {% else %}
+                        <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
+                           style="float: right">add</a>
+                    {% endif %}
+
                 </div>
 
             </div>

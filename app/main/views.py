@@ -24,13 +24,17 @@ from app.main.forms import SearchForm
 @main.route('/', methods=['GET', 'POST'] )
 @login_required
 def home():
-
     if request.method == 'POST':
-
         request.form[''];
         flash('comment add successfully', category='success')
     post = mongo.db.posts.find()
-    return render_template('index.html', post=post )
+    try:
+        userbookmarks = mongo.db.users.find_one({"_id": current_user.username})['bookmarks']
+        print(userbookmarks)
+        return render_template('index.html', post=post , userbookmarks=userbookmarks )
+    except:
+        print("not exist")
+    return render_template('index.html', post=post, userbookmarks=[])
 
 
 
@@ -64,7 +68,7 @@ def new_post():
     return render_template('add_post.html', form=form)
 
 
-@main.route('/editpost/', methods=['GET', 'POST'])
+@main.route('/editpost', methods=['GET', 'POST'])
 @login_required
 def editpost():
     postid = request.args.get('postid')
@@ -113,7 +117,7 @@ def editpost():
         return redirect(url_for('main.profile'))
     return render_template('add_post.html', form=form)
 
-@main.route('/deletepost/')
+@main.route('/deletepost')
 @login_required
 def delete_post():
     postid = request.args.get('postid')
@@ -122,7 +126,7 @@ def delete_post():
     return redirect(url_for('main.profile'))
 
 
-@main.route('/search/', methods=['GET', 'POST'])
+@main.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'GET':
         return render_template('search.html', title='Search', form=SearchForm())
@@ -138,7 +142,7 @@ def search():
     return render_template('search.html', form=form)
 
 
-@main.route('/mybookmarks/')
+@main.route('/mybookmarks')
 @login_required
 def mybookmarks():
     bookmark_ids = mongo.db.users.find_one({"_id": current_user.username})['bookmarks']
@@ -147,7 +151,7 @@ def mybookmarks():
     return render_template('index.html', post=bookmark_posts)
 
 
-@main.route('/profile/')
+@main.route('/profile')
 def profile():
     username = request.args.get('username')
     if username == None and current_user.is_authenticated:
