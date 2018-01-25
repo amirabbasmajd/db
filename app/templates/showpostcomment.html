@@ -19,10 +19,7 @@
                                     <p>
                                         <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
                                     </p>
-                                    {{ data['_id'] }}
                                     <br>
-                                    {#                    <button class="btn btn-info" type="submit" href="/showpostandcomment?myid="{{data['_id']}} id = "btnCommit" value= {{ data['_id'] }} > show post comment</button>#}
-                                    {#                    <a href="/showpostandcomment?myid={{data['_id']}}"  class="button">Go to Google</a>#}
                                     {% if 'tags' in data %}
                                         <hr>
                                         {% for tag in data['tags'] %}
@@ -59,10 +56,8 @@
 
                                 </div>
                             </div>
-
                         {% endfor %}
                     </div>
-
                 {% endfor %}
         </div>
     </form>

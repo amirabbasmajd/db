@@ -3,47 +3,66 @@
 
     <br><br><br>
 
-    <form action="" method="POST" name="form">
-        <div class="col-md-4 col-md-offset-4">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                <label class="control-label" for="text">text</label>
-                {{ form.search_text }}
+    <div class="row">
+        <form action="" method="POST" name="form">
+            <div class="col-md-4 col-md-offset-4">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label class="control-label" for="text">search:</label>
+                    {{ form.search_text }}
+                </div>
+                <button class="btn btn-info" type="submit">Search</button>
             </div>
-            <button class="btn btn-info" type="submit">Search</button>
-        </div>
-    </form>
+        </form>
+    </div>
 
+    <div class="row">
+        {% for data in post %}
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img class="img-rounded" src= {{ data['image'] }}>
 
-    {% for data in post %}
-        <div class="col-sm-6 col-md-3">
-            <div class="thumbnail">
-                <img class="img-rounded" src= {{ data['image'] }}>
+                    <div class="caption text-center">
+                        <p>
+                            <b>
+                                <h4>{{ data['title'] }}</h4>
+                            </b>
+                        </p>
+                        <p>{{ data['post_body'] }}</p>
+                        <p>
+                            <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
+                        </p>
+                        <br>
 
-                <div class="caption text-center">
-                    <p>
-                        <b>
-                            <h4>{{ data['title'] }}</h4>
-                        </b>
-                    </p>
-                    <p>{{ data['post_body'] }}</p>
-                    <p>
-                        <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
-                    </p>
-                    {{ data['_id'] }}
-                    <br>
-
-                    <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Show Comments</a>
-                    {% if 'tags' in data %}
-                        <hr>
-                        {% for tag in data['tags'] %}
-                            <span class="label label-default">{{ tag }}</span>
-                        {% endfor %}
-                    {% endif %}
+                        <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Show Comments</a>
+                        {% if 'tags' in data %}
+                            <hr>
+                            {% for tag in data['tags'] %}
+                                <span class="label label-default">{{ tag }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-
-
+        {% endfor %}
+    </div>
+    <div class="row">
+        {% for user in users %}
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <div class="caption text-center">
+                        <p>
+                            <b>
+                                <h4>{{ user['_id'] }}</h4>
+                            </b>
+                        </p>
+                        <p>{{ user['full_name'] }}</p>
+                        <p>
+                            <br><a href="/profile?username={{ user['_id'] }}" class="btn btn-info">show profile</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

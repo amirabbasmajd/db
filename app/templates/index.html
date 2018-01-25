@@ -18,10 +18,8 @@
                         <p>
                             <br><a href="{{ data['link'] }}" class="btn btn-info">More info</a>
                         </p>
-                        {{ data['_id'] }}
                         <br>
-                        {#                    <button class="btn btn-info" type="submit" href="/showpostandcomment?myid="{{data['_id']}} id = "btnCommit" value= {{ data['_id'] }} > show post comment</button>#}
-                        <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Go to Google</a>
+                        <a href="/showpostandcomment?myid={{ data['_id'] }}" class="button">Show comments</a>
                         {% if 'tags' in data %}
                             <hr>
                             {% for tag in data['tags'] %}
@@ -30,16 +28,14 @@
                         {% endif %}
                     </div>
                     {{ data['like']|length }}
-                    {% print("here index") %}
-                    {% print(userbookmarks) %}
-                    {% print( data['_id']) %}
+
                     {% if current_user.username not in data['like'] %}
                         <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Like IT</a>
                     {% else %}
                         <a class="btn btn-info" href="/likepost?myid={{ data['_id'] }}" class="button">Dislike IT</a>
                     {% endif %}
 
-                    {% if data['_id'] in userbookmarks %}
+                    {% if data._id|string in userbookmarks %}
                         <a class="btn btn-info" href="/bookmark?myid={{ data['_id'] }}" class="button"
                            style="float: right">remove</a>
                     {% else %}

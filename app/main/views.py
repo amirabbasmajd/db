@@ -28,13 +28,15 @@ def home():
         request.form[''];
         flash('comment add successfully', category='success')
     post = mongo.db.posts.find()
-    try:
-        userbookmarks = mongo.db.users.find_one({"_id": current_user.username})['bookmarks']
-        print(userbookmarks)
-        return render_template('index.html', post=post, userbookmarks=userbookmarks)
-    except:
-        print("not exist")
-    return render_template('index.html', post=post, userbookmarks=[])
+    userbookmarks = mongo.db.users.find_one({"_id": current_user.username}, {"_id": 0, "bookmarks": 1})
+    if 'bookmarks' in userbookmarks:
+        userbookmarks = userbookmarks['bookmarks']
+    return render_template('index.html', post=post, userbookmarks=userbookmarks)
+
+    # if userbookmarks:
+    #     ['bookmarks']
+    # else:
+    #     return render_template('index.html', post=post, userbookmarks=[])
 
 
 # @main.add_comment('/addcommenct' ,methods=['GET', 'POST'] )
@@ -61,7 +63,7 @@ def new_post():
                                'tags': form.tags.data.split(','),
                                'username': current_user.username
                                })
-        request.files['image'].save("../db/app" + file_path)
+        request.files['image'].save("../mongodb_project/app" + file_path)
         flash('Post added successfully!', category='success')
         return redirect(url_for('main.new_post'))
     return render_template('add_post.html', form=form)
@@ -111,7 +113,7 @@ def editpost():
              'tags': form.tags.data.split(','),
              'username': current_user.username})
 
-        request.files['image'].save("../db/app" + file_path)
+        request.files['image'].save("../mongodb_project/app" + file_path)
         flash('Post edited successfully!', category='success')
         return redirect(url_for('main.profile'))
     return render_template('add_post.html', form=form)
@@ -134,13 +136,21 @@ def search():
     form = SearchForm()
     searched_text = form.search_text.data
     if form.validate_on_submit():
-        print("enter search")
-
-        post = mongo.db.posts.find(
+        posts = mongo.db.posts.find(
             {"$or": [{"title": {"$regex": searched_text}}, {"post_body": {"$regex": searched_text}}]})
-        return render_template('search.html', title='Search', form=form, post=post)
 
-        # flash('Username already exist', category='error')
+        users = mongo.db.users.find(
+            {"$or": [{"_id": {"$regex": searched_text}}, {"full_name": {"$regex": searched_text}}]} ,
+            {"_id" : 1, "full_name" : 1 }
+        )
+
+        if posts.count() == 0:
+            flash('no post found', category='warning')
+        if users.count() == 0:
+            flash('no user found', category='warning')
+
+        return render_template('search.html', title='Search', form=form, post=posts , users = users)
+
     return render_template('search.html', form=form)
 
 
@@ -169,7 +179,6 @@ def profile():
     return render_template('profile.html', post=post, user_detail=user_detail, can_edit=can_edit)
 
 
-# @main.route('/showpostandcomment/<string:post_id>', methods=['GET', 'POST'])
 @main.route('/showpostandcomment', methods=['GET', 'POST'])
 def showpostandcomment():
     s = request.args.get('myid')
@@ -200,10 +209,9 @@ def likepost():
 
 
 @main.route('/bookmark', methods=['GET', 'POST'])
+@login_required
 def bookmark():
-    print("here")
     s = request.args.get('myid')
-    print(s)
     isBookmarked = mongo.db.users.find({"_id": current_user.username, "bookmarks": s}).count()
     if isBookmarked == 0:
         mongo.db.users.update({"_id": current_user.username}, {"$push": {"bookmarks": s}})

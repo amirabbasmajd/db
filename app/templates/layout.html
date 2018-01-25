@@ -29,6 +29,8 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('main.search') }}"><i>
+                        <img src="../static/img/ic_search.png" style="width: 17px"></i></a></li>
                     <li><a href="{{ url_for('main.home') }}"><i class="fa fa-home fa-lg"></i></a></li>
                     <li><a href="{{ url_for('main.new_post') }}"><i class="fa fa-plus fa-lg"></i></a></li>
                     <li><a href="{{ url_for('main.profile') }}"><i class="fa fa-user fa-lg"></i></a></li>
